@@ -1,0 +1,13 @@
+.main {
+  padding: 10rem;
+  width: 100vw;
+  height: 100vh;
+}
+
+.text{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  font-family: "Copperplate",fantasy;
+}

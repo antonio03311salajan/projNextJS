@@ -1,0 +1,159 @@
+.sidebar__container{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    height: 5rem;
+    background-color: rgba(30,30,30,1);
+}
+
+.userinfo__container {
+    width: 100%;
+    text-align: left;
+    font-weight: bold;
+    font-size: medium;
+    color: white;
+    margin-left: 2rem;
+}
+
+.buttons__container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.button__dashboard{
+    text-decoration: none;
+    text-align: center;
+    background-color: transparent;
+    border: none;
+    margin-right: 2rem;
+}
+
+.button__dashboard__text{
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+
+.buttons__container__checkbox{
+    display: none;
+}
+
+.buttons__container__nav__button{
+    background-color: rgba(30,30,30,1);
+    height: 3.5rem;
+    width: 3.5rem;
+    border-radius: 50%;
+    position: fixed;
+    top: 0.5rem;
+    right: 2rem;
+    z-index: 3;
+    text-align: center;
+}
+
+.buttons__container__nav__background{
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    background-color: rgba(30,30,30,1);
+    position: fixed;
+    top: 0.6rem;
+    right: 2.25rem;
+    z-index: 1;
+    transition: all .5s ease-in-out;
+}
+
+.buttons__container__nav{
+    height: 100vh;
+    position: fixed;
+    top:0.2rem;
+    right:0;
+    z-index: 2;
+    opacity: 0;
+    width: 100vw;
+    transition: all .5s ease-in-out;
+}
+
+.buttons__container__nav__list{
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons__container__checkbox:checked ~ .buttons__container__nav__background{
+    transform: scale(200);
+}
+
+.buttons__container__checkbox:checked ~ .buttons__container__nav{
+    opacity: 1;
+    width: 100%;
+}
+
+.buttons__container__checkbox:checked ~ .buttons__container__nav__button{
+    background-color: transparent;
+}
+
+.buttons__container__icon{
+    width: 2rem;
+    height: 2px;
+    background-color: white;
+    display: inline-block;
+    position: relative;
+    margin-top: 1.65rem;
+}
+
+.buttons__container__icon::before{
+    width: 2rem;
+    height: 2px;
+    background-color: white;
+    display: inline-block;
+    content: "";
+    position: absolute;
+    top: -.5rem;
+    right: 0;
+}
+
+.buttons__container__icon::after{
+    width: 2rem;
+    height: 2px;
+    background-color: white;
+    display: inline-block;
+    content: "";
+    position: absolute;
+    top: .5rem;
+    right: 0;
+}
+
+.buttons__container__nav__button:hover .buttons__container__icon::before{
+    top: -.6rem;
+}
+.buttons__container__nav__button:hover .buttons__container__icon::after{
+    top: .6rem;
+}
+
+.buttons__container__checkbox:checked + .buttons__container__nav__button .buttons__container__icon{
+    background-color: transparent;
+}
+
+.buttons__container__checkbox:checked + .buttons__container__nav__button .buttons__container__icon::before{
+    top: 0;
+    transform: rotate(45deg);
+}
+
+.buttons__container__checkbox:checked + .buttons__container__nav__button .buttons__container__icon::after{
+    top: 0;
+    transform: rotate(-45deg);
+}
+
+.button__container__listitem{
+    margin-bottom: 2rem;
+}
+
+
+

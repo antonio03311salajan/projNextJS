@@ -1,0 +1,63 @@
+.page__container{
+    width: 100%;
+    height: 100vh;
+}
+
+.input {
+    background-color: grey;
+    border: 1px solid white;
+    min-height: 2rem;
+    min-width: 50%;
+    border-radius: 30px;
+    text-align: center;
+    color: white;
+    font-size: medium;
+}
+
+.userAction__button{
+    border: none;
+    width: 60%;
+    height: 14%;
+    background-color: gray;
+    border-radius: 40px;
+    padding: 1rem 2rem;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.options__container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-color: rgba(30,30,30,1);
+    margin-left: 30%;
+    width: 40%;
+    height: 100%;
+}
+
+.buttons__container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: -20rem;
+    width: 100%;
+    height: 50%;
+}
+
+.options__text{
+    height: 20%;
+    width: 100%;
+    text-align: center;
+    margin-top: 0;
+    font-size: 2rem;
+    font-family: "Copperplate",fantasy;
+    color: rgba(220,220,220,1);
+}
+
+.back__arrow{
+    margin-left: .5rem;
+    margin-top: .5rem;
+    font-size: 1.5rem;
+}

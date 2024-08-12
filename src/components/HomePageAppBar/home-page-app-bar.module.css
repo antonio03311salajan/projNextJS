@@ -1,0 +1,33 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4rem;
+    padding: 2rem;
+    background-color: rgba(150,150,150,0.075);
+}
+
+.button__signin{
+    padding: 1rem;
+    background-color: rgba(170,170,165,0.2);
+    text-align: center;
+    color: white;
+    border-radius: 40px;
+    text-transform: uppercase;
+    font-family: "Copperplate",fantasy;
+    font-size: 1.25rem;
+}
+
+.button__homepage{
+    font-size: large;
+    transition: all .5s ease-in-out;
+    text-transform: uppercase;
+    font-family: 'Copperplate', fantasy;
+    color: white;
+}
+
+.button__homepage:hover{
+    text-shadow: 2px 2px 16px white;
+}
+
+
