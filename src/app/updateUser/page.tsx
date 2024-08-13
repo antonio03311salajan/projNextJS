@@ -1,13 +1,19 @@
+'use client';
 import {useEffect, useState} from "react";
-import styles from "../CreateUserPage/createuser.module.css";
+import styles from "../../components/CreateUserPage/createuser.module.css";
 
 
-const UpdateUserPage = () => {
+const Page = () => {
     const [credentials, setCredentials] = useState({
         email: "",
         password: "",
         id:"",
     })
+
+    useEffect(() => {
+        //@ts-ignore
+        document.getElementById('id_input').value = localStorage.getItem('userId');
+    }, []);
 
     const [userUpdated, setUserUpdated] = useState(false);
     const [error, setError] = useState(false)
@@ -86,4 +92,4 @@ const UpdateUserPage = () => {
     );
 }
 
-export default UpdateUserPage
+export default Page

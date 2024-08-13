@@ -1,8 +1,9 @@
+'use client';
 import styles from "@/components/CreateUserPage/createuser.module.css";
 import {useEffect, useState} from "react";
 
 
-const DeleteUserPage = ()=>{
+const Page = ()=>{
     const [userId, setUserId] = useState()
     const [userDeleted, setUserDeleted] = useState(false);
     const [error, setError] = useState(false)
@@ -14,7 +15,7 @@ const DeleteUserPage = ()=>{
     function handleDeleteUser() {
         const path="/user/";
         // @ts-ignore
-        fetch(process.env.NEXT_PUBLIC_API_URL+path+userId, {
+        fetch(process.env.NEXT_PUBLIC_API_URL+path+localStorage.getItem("userId"), {
             method: "DELETE",
             headers:{
                 "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -44,6 +45,11 @@ const DeleteUserPage = ()=>{
         },3000)
     },[error])
 
+    useEffect(() => {
+        //@ts-ignore
+        document.getElementById("id_input").value = localStorage.getItem("userId");
+    }, []);
+
     return (
         <div className={styles.container}>
             <h1 className={styles.login__text}>Delete User</h1>
@@ -67,5 +73,5 @@ const DeleteUserPage = ()=>{
     );
 }
 
-export default DeleteUserPage;
+export default Page;
 

@@ -23,3 +23,19 @@
     justify-content: center;
     align-items: center;
 }
+
+.options__container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.options__btn{
+    background-color: rgba(60,60,60,1);
+    border: none;
+    color: white;
+    font-size: .5rem;
+    padding: .25rem .5rem;
+    border-radius: 15px;
+    text-transform: uppercase;
+}
