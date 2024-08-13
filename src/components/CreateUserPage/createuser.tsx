@@ -7,6 +7,7 @@ const CreateUserPage = () => {
         password: ""
     })
     const [userCreated, setUserCreated] = useState(false);
+    const [error, setError] = useState(false)
 
     const handleChange = (e: any) => {
         setCredentials({
@@ -26,10 +27,17 @@ const CreateUserPage = () => {
             headers: {
                 "Content-type": "application/json"
             }
-        }).then(res => res.json());
+        }).then(res => res.json()).then(res=>{
+            console.log(res)
+            if(res.statusCode==400 || res.statusCode==401){
+                setError(true);
+            }
+            else{
+                setUserCreated(true);
+            }
+        });
         // @ts-ignore
-        document.querySelector(`input`).value="";
-        setUserCreated(true);
+        document.querySelectorAll(`input`).value="";
     }
 
     useEffect(()=>{
@@ -37,6 +45,12 @@ const CreateUserPage = () => {
             setUserCreated(false);
         },3000)
     },[userCreated])
+
+    useEffect(()=>{
+        setTimeout(()=>{
+            setError(false);
+        },3000)
+    },[error])
 
     return (
         <div className={styles.container}>
@@ -55,6 +69,9 @@ const CreateUserPage = () => {
             </div>
             {userCreated &&
                 <p className={styles.user_created__message}>User created successfully</p>
+            }
+            {error &&
+                <p className={styles.user_created__message}>User couldn't be created</p>
             }
         </div>
     );

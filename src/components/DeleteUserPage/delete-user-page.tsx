@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 const DeleteUserPage = ()=>{
     const [userId, setUserId] = useState()
     const [userDeleted, setUserDeleted] = useState(false);
+    const [error, setError] = useState(false)
 
     const handleChange = (e: any) => {
         setUserId(e.target.value)
@@ -18,8 +19,17 @@ const DeleteUserPage = ()=>{
             headers:{
                 "Authorization": `Bearer ${localStorage.getItem("token")}`,
             }
-        }).then(res => res.json()).then(res=> console.log(res))
-        setUserDeleted(true);
+        }).then(res => res.json()).then((res)=>{
+            document.querySelectorAll(`input`).forEach(e=>{
+                e.value="";
+            })
+            if(res.statusCode===400 || res.statusCode===401){
+                setError(true);
+            }
+            else{
+                setUserDeleted(true);
+            }
+        })
     }
 
     useEffect(()=>{
@@ -27,6 +37,12 @@ const DeleteUserPage = ()=>{
             setUserDeleted(false);
         },3000)
     },[userDeleted])
+
+    useEffect(()=>{
+        setTimeout(()=>{
+            setError(false);
+        },3000)
+    },[error])
 
     return (
         <div className={styles.container}>
@@ -43,6 +59,9 @@ const DeleteUserPage = ()=>{
             </div>
             {userDeleted &&
                 <p className={styles.user_created__message}>User deleted successfully</p>
+            }
+            {error &&
+                <p className={styles.user_created__message}>User couldn't deleted</p>
             }
         </div>
     );

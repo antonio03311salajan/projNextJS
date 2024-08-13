@@ -7,6 +7,7 @@ import {useRouter} from "next/navigation";
 const LoginPage = (props) => {
     const [credentials, setCredentials] = useState({})
     const [loggedIn, setLoggedIn] = useState(false);
+    const [invalid, setInvalid] = useState(false);
     const router = useRouter();
     const handleChange = (e) => {
         setCredentials({
@@ -17,7 +18,6 @@ const LoginPage = (props) => {
 
     async function handleLogin() {
         let token;
-        let success;
         await fetch("http://localhost:3001/auth/login", {
             method: "POST",
             body: JSON.stringify({
@@ -36,12 +36,19 @@ const LoginPage = (props) => {
                 setTimeout(() => {
                     setLoggedIn(true);
                 }, 0);
-            } else {
-                res.status(401).json({})
-                success = false;
             }
-        });
+            else {
+                document.querySelectorAll("input").forEach(e => {e.value=""})
+                setInvalid(true);
+            }
+        })
     }
+
+    useEffect(()=>{
+        setTimeout(()=>{
+            setInvalid(false);
+        },3000)
+    },[invalid])
 
     function handleRole() {
         fetch("http://localhost:3001/user/by-email/" + credentials.email, {
@@ -73,15 +80,19 @@ const LoginPage = (props) => {
                     </div>
                 </div>
                 <div className={styles.container__buttons}>
-                    <button className={styles.button__login} onClick={()=>{
+                    <button className={styles.button__login} onClick={() => {
                         handleLogin().then(() => {
                             handleRole()
                         });
-                    }}>Login</button>
+                    }}>Login
+                    </button>
                 </div>
+                {invalid &&
+                    <p className={styles.unauthorized__text}>Unauthorized</p>
+                }
             </div>
         );
-    }
+}
 
 
-    export default LoginPage;
+export default LoginPage;

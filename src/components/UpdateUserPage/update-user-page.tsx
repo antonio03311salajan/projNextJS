@@ -10,6 +10,7 @@ const UpdateUserPage = () => {
     })
 
     const [userUpdated, setUserUpdated] = useState(false);
+    const [error, setError] = useState(false)
 
     const handleChange = (e: any) => {
         setCredentials({
@@ -33,9 +34,11 @@ const UpdateUserPage = () => {
         }).then(res => res.json()).then(
             res =>{
                 //@ts-ignore
-                document.querySelector(`input`).value="";
-                if(res.status===400 || res.status===401){
-                    console.log("Error");
+                document.querySelectorAll(`input`).forEach(e=>{
+                    e.value="";
+                })
+                if(res.statusCode===400 || res.statusCode===401){
+                    setError(true);
                 }
                 else{
                     setUserUpdated(true);
@@ -49,6 +52,12 @@ const UpdateUserPage = () => {
             setUserUpdated(false);
         },3000)
     },[userUpdated])
+
+    useEffect(()=>{
+        setTimeout(()=>{
+            setError(false);
+        },3000)
+    },[error])
 
     return (
         <div className={styles.container}>
@@ -69,6 +78,9 @@ const UpdateUserPage = () => {
             </div>
             {userUpdated &&
                 <p className={styles.user_created__message}>User updated successfully</p>
+            }
+            {error &&
+                <p className={styles.user_created__message}>User couldn't be updated</p>
             }
         </div>
     );
