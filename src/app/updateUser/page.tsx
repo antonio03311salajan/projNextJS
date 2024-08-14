@@ -1,6 +1,7 @@
 'use client';
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import styles from "../../components/CreateUserPage/createuser.module.css";
+import validateEmail from "@/validation/validation";
 
 
 const Page = () => {
@@ -10,9 +11,14 @@ const Page = () => {
         id:"",
     })
 
+    const input_email = useRef(null);
+    const input_password = useRef(null);
+    const input_id = useRef(null);
+    const [errors, setErrors] = useState(null);
+
     useEffect(() => {
         //@ts-ignore
-        document.getElementById('id_input').value = localStorage.getItem('userId');
+        input_id.current.value = localStorage.getItem("userId");
     }, []);
 
     const [userUpdated, setUserUpdated] = useState(false);
@@ -27,6 +33,24 @@ const Page = () => {
 
     function handleUpdate() {
         const path = "/user/"
+        let errorsVar=validateEmail(credentials.email);
+        if(input_email!=null)
+        { // @ts-ignore
+            input_email.current.value = null;
+        }
+        if(input_password!=null)
+        { // @ts-ignore
+            input_password.current.value = null;
+        }
+        if(input_password!=null)
+        { // @ts-ignore
+            input_id.current.value = localStorage.getItem('userId');
+        }
+        if(errorsVar){
+            // @ts-ignore
+            setErrors(errorsVar);
+            return;
+        }
         fetch(process.env.NEXT_PUBLIC_API_URL + path + credentials.id, {
             method: "PUT",
             body: JSON.stringify({
@@ -40,9 +64,6 @@ const Page = () => {
         }).then(res => res.json()).then(
             res =>{
                 //@ts-ignore
-                document.querySelectorAll(`input`).forEach(e=>{
-                    e.value="";
-                })
                 if(res.statusCode===400 || res.statusCode===401){
                     setError(true);
                 }
@@ -65,6 +86,12 @@ const Page = () => {
         },3000)
     },[error])
 
+    useEffect(()=>{
+        setTimeout(()=>{
+            setErrors( null);
+        },3000)
+    },[errors])
+
     return (
         <div className={styles.container}>
             <h1 className={styles.login__text}>Update User</h1>
@@ -72,11 +99,14 @@ const Page = () => {
             <div className={styles.container__buttons}>
                 <div className={styles.container__inputs}>
                     <input id={"id_input"} className={styles.input} type="text" name="id" onChange={handleChange}
-                           placeholder="User Id"></input>
+                           placeholder="User Id" ref={input_id} disabled={true}></input>
                     <input id={"email_input"} className={styles.input} type="email" name="email" onChange={handleChange}
-                           placeholder="email"></input>
+                           placeholder="email" ref={input_email}></input>
+                    {errors &&
+                        <span>Invalid Email</span>
+                    }
                     <input id={"password_input"} className={styles.input} type="password" name="password" onChange={handleChange}
-                           placeholder="password"></input>
+                           placeholder="password" ref={input_password}></input>
                 </div>
             </div>
             <div className={styles.container__buttons}>

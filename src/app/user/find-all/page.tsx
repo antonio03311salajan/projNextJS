@@ -37,12 +37,7 @@ const UserPage = ()=>{
         <>
             {showUsers ? (
                 <>
-                    <div className={styles.buttons__container2}>
-                        <button className={styles.back__arrow} onClick={() => {
-                            handleBack("users")
-                        }}>&larr;</button>
-                        <button className={styles.create__btn} onClick={handleCreateUser}>Create user</button>
-                    </div>
+                    <button className={styles.create__btn} onClick={handleCreateUser}>Create user</button>
                     <UserList/>
                 </>) : null
             }

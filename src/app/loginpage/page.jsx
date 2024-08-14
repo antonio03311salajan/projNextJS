@@ -1,14 +1,19 @@
 'use client';
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {setAuthenticationHeader} from "../utils/authenticate";
 import styles from "./page.module.css";
 import {useRouter} from "next/navigation";
+import validateEmail from "../../validation/validation";
 
 const LoginPage = (props) => {
     const [credentials, setCredentials] = useState({})
     const [loggedIn, setLoggedIn] = useState(false);
     const [invalid, setInvalid] = useState(false);
+    const [error,setError] = useState();
+    const input_email = useRef(null);
+    const input_password = useRef(null);
     const router = useRouter();
+
     const handleChange = (e) => {
         setCredentials({
             ...credentials,
@@ -18,6 +23,17 @@ const LoginPage = (props) => {
 
     async function handleLogin() {
         let token;
+        let errors=validateEmail(credentials.email);
+        if (input_email != null) { // @ts-ignore
+            input_email.current.value = null;
+        }
+        if (input_password != null) { // @ts-ignore
+            input_password.current.value = null;
+        }
+        if(errors){
+            setError(errors);
+            return;
+        }
         await fetch("http://localhost:3001/auth/login", {
             method: "POST",
             body: JSON.stringify({
@@ -37,18 +53,17 @@ const LoginPage = (props) => {
                     setLoggedIn(true);
                 }, 0);
             }
-            else {
-                document.querySelectorAll("input").forEach(e => {e.value=""})
+            else{
                 setInvalid(true);
             }
         })
     }
 
-    useEffect(()=>{
-        setTimeout(()=>{
+    useEffect(() => {
+        setTimeout(() => {
             setInvalid(false);
-        },3000)
-    },[invalid])
+        }, 3000)
+    }, [invalid])
 
     function handleRole() {
         fetch("http://localhost:3001/user/by-email/" + credentials.email, {
@@ -62,36 +77,46 @@ const LoginPage = (props) => {
     }
 
 
-        useEffect(() => {
-            if (loggedIn) {
-                router.push("/mainpage");
-            }
-        })
-        return (
-            <div className={styles.container}>
-                <h1 className={styles.login__text}>Login</h1>
-                <div className={styles.underline}></div>
-                <div className={styles.container__buttons}>
-                    <div className={styles.container__inputs}>
-                        <input className={styles.input} type="email" name="email" onChange={handleChange}
-                               placeholder="email"></input>
-                        <input className={styles.input} type="password" name="password" onChange={handleChange}
-                               placeholder="password"></input>
-                    </div>
+    useEffect(() => {
+        if (loggedIn) {
+            router.push("/mainpage");
+        }
+    })
+
+    useEffect(()=>{
+        setTimeout(()=>{
+            setError( undefined);
+        },3000)
+    },[error])
+
+    return (
+        <div className={styles.container}>
+            <h1 className={styles.login__text}>Login</h1>
+            <div className={styles.underline}></div>
+            <div className={styles.container__buttons}>
+                <div className={styles.container__inputs}>
+                    <input className={styles.input} type="email" name="email" onChange={handleChange}
+                           placeholder="email" ref={input_email}></input>
+                    { error &&
+                        <span>Invalid email</span>
+                    }
+                    <input className={styles.input} type="password" name="password" onChange={handleChange}
+                           placeholder="password" ref={input_password}></input>
                 </div>
-                <div className={styles.container__buttons}>
-                    <button className={styles.button__login} onClick={() => {
-                        handleLogin().then(() => {
-                            handleRole()
-                        });
-                    }}>Login
-                    </button>
-                </div>
-                {invalid &&
-                    <p className={styles.unauthorized__text}>Unauthorized</p>
-                }
             </div>
-        );
+            <div className={styles.container__buttons}>
+                <button className={styles.button__login} onClick={() => {
+                    handleLogin().then(() => {
+                        handleRole()
+                    });
+                }}>Login
+                </button>
+            </div>
+            {invalid &&
+                <p className={styles.unauthorized__text}>Unauthorized</p>
+            }
+        </div>
+    );
 }
 
 

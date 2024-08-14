@@ -1,12 +1,13 @@
 'use client';
 import styles from "@/components/CreateUserPage/createuser.module.css";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 
 const Page = ()=>{
     const [userId, setUserId] = useState()
     const [userDeleted, setUserDeleted] = useState(false);
     const [error, setError] = useState(false)
+    const input_id  = useRef(null);
 
     const handleChange = (e: any) => {
         setUserId(e.target.value)
@@ -45,9 +46,8 @@ const Page = ()=>{
         },3000)
     },[error])
 
-    useEffect(() => {
-        //@ts-ignore
-        document.getElementById("id_input").value = localStorage.getItem("userId");
+    useEffect(() => {//@ts-ignore
+        input_id.current.value = localStorage.getItem("userId");
     }, []);
 
     return (
@@ -57,7 +57,7 @@ const Page = ()=>{
             <div className={styles.container__buttons}>
                 <div className={styles.container__inputs}>
                     <input id={"id_input"} className={styles.input} type="text" name="id" onChange={handleChange}
-                           placeholder="user id"></input>
+                           placeholder="user id" ref={input_id} disabled={true}></input>
                 </div>
             </div>
             <div className={styles.container__buttons}>

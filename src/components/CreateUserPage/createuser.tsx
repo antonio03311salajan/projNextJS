@@ -1,5 +1,6 @@
 import styles from "./createuser.module.css"
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import validateEmail from "@/validation/validation";
 
 const CreateUserPage = () => {
     const [credentials, setCredentials] = useState({
@@ -8,6 +9,9 @@ const CreateUserPage = () => {
     })
     const [userCreated, setUserCreated] = useState(false);
     const [error, setError] = useState(false)
+    const inputEmail = useRef(null);
+    const inputPassword = useRef(null);
+    const [errors, setErrors] = useState()
 
     const handleChange = (e: any) => {
         setCredentials({
@@ -16,8 +20,22 @@ const CreateUserPage = () => {
         })
     }
 
-    function handleCreate() {
+    const handleCreate = ()=>{
         const path = "/user"
+        let errorsVar=validateEmail(credentials.email);
+        if(inputEmail!=null)
+        { // @ts-ignore
+            inputEmail.current.value = null;
+        }
+        if(inputPassword!=null)
+        { // @ts-ignore
+            inputPassword.current.value = null;
+        }
+        if(errorsVar){
+            // @ts-ignore
+            setErrors(errorsVar);
+            return;
+        }
         fetch(process.env.NEXT_PUBLIC_API_URL + path, {
             method: "POST",
             body: JSON.stringify({
@@ -28,7 +46,6 @@ const CreateUserPage = () => {
                 "Content-type": "application/json"
             }
         }).then(res => res.json()).then(res=>{
-            console.log(res)
             if(res.statusCode==400 || res.statusCode==401){
                 setError(true);
             }
@@ -36,8 +53,6 @@ const CreateUserPage = () => {
                 setUserCreated(true);
             }
         });
-        // @ts-ignore
-        document.querySelectorAll(`input`).value="";
     }
 
     useEffect(()=>{
@@ -52,16 +67,25 @@ const CreateUserPage = () => {
         },3000)
     },[error])
 
+    useEffect(()=>{
+        setTimeout(()=>{
+            setErrors( undefined);
+        },3000)
+    },[errors])
+
     return (
         <div className={styles.container}>
             <h1 className={styles.login__text}>Create User</h1>
             <div className={styles.underline}></div>
             <div className={styles.container__buttons}>
                 <div className={styles.container__inputs}>
-                    <input id={"email_input"} className={styles.input} type="email" name="email" onChange={handleChange}
-                           placeholder="email"></input>
-                    <input id={"password_input"} className={styles.input} type="password" name="password" onChange={handleChange}
-                           placeholder="password"></input>
+                    <input className={styles.input} type="email" name="email" onChange={handleChange}
+                           placeholder={"Email"} ref={inputEmail}/>
+                    {errors &&
+                        <span>Invalid Email</span>
+                    }
+                    <input className={styles.input} type="password" name="password" onChange={handleChange}
+                           placeholder="password" ref={inputPassword}/>
                 </div>
             </div>
             <div className={styles.container__buttons}>
